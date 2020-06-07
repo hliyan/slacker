@@ -1,0 +1,18 @@
+{
+  "name": "@hliyan/slacker",
+  "version": "0.1.0",
+  "description": "A test slack event receiver without using Bolt",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "github.com/hliyan/slacker.git"
+  },
+  "keywords": [
+    "slack"
+  ],
+  "author": "hasithaliyan@gmail.com",
+  "license": "ISC"
+}
