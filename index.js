@@ -14,7 +14,7 @@ expect(mockSend).toHaveBeenCalledWith({message: 'Hi, foo', username: 'foo'});
 
 // V2: event driven was overkill, try simple awaits like everyone else
 
-let res = await engine.as('john').say('hello');
+let res = await engine.say({username: 'foo', message: 'Hi, foo'});
 expect(res).toEqual({message: 'Hi, john', username: 'foo'});
 
 */
