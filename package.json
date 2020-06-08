@@ -4,7 +4,8 @@
   "description": "A test slack event receiver without using Bolt",
   "main": "index.js",
   "scripts": {
-    "test": "jest --coverage=true"
+    "test": "jest --coverage=true --detectOpenHandles",
+    "start": "node index.js"
   },
   "repository": {
     "type": "git",
@@ -16,6 +17,10 @@
   "author": "hasithaliyan@gmail.com",
   "license": "ISC",
   "dependencies": {
-    "jest": "^26.0.1"
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "jest": "^26.0.1",
+    "supertest": "^4.0.2"
   }
 }

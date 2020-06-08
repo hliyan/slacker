@@ -1,3 +1,10 @@
+const server = require('./server');
+
+server.listen(process.env.PORT | 3000, () => {
+  console.log('Listening...')
+});
+
+
 /*
 const engine = require('./conversation-engine'); // engine with only business logic
 
