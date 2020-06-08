@@ -5,8 +5,7 @@ describe('GET /', () => {
   test('should return hello world', (done) => {
     request(app)
       .get('/')
-      .send({hello: 'world'})
       .expect('Content-Type', /json/)
-      .expect(200, done);
+      .expect(200, {hello: 'world'}, done);
   });
 });
