@@ -8,8 +8,8 @@ app.get('/', (req, res) => { // basic test endpoint
 });
 
 app.post('/slack/event', (req, res) => {
+  console.log(req.headers);
   if (req.body.type === 'url_verification') { // challenge from slack
-    console.log(req.headers);
     res.status(200).json({challenge: req.body.challenge});
     return;
   }
