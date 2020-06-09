@@ -2,7 +2,7 @@ const express = require('express');
 const crypto = require('crypto');
 
 const app = express();
-app.use(express.text("*/*"));
+app.use(express.text({type: "*/*"}));
 
 app.get('/', (req, res) => { // basic test endpoint
   res.status(200).json({hello: 'world'});
