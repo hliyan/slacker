@@ -12,7 +12,9 @@ app.post('/slack/event', (req, res) => {
   // https://api.slack.com/authentication/verifying-requests-from-slack
   const sha256 = crypto.createHmac('sha256', process.env.SLACK_SIGNING_SECRET);
   const signature = sha256.update(`v0:${ req.headers['x-slack-request-timestamp']}:${req.body}`).digest('hex');
-  console.log(req.headers['x-slack-signature']);
+  const messageSignature = req.headers['x-slack-signature'].split('=')[2];
+  console.log(req.body);
+  console.log(messageSignature);
   console.log(signature);
 
   //if (req.headers['x-slack-signature'] !== signature) {
