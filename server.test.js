@@ -1,5 +1,6 @@
 const app = require('./server');
 const request = require('supertest');
+const crypto = require('crypto'); // for the hmac tests
 
 describe('GET /', () => {
   test('should return hello world', (done) => {
@@ -11,7 +12,7 @@ describe('GET /', () => {
 });
 
 describe('POST /slack/event', () => {
-  test('should respond to the challenge sent by slack', (done) => {
+  test('should respond to the initial challenge sent by slack', (done) => {
     request(app)
       .post('/slack/event')
       .send({type: 'url_verification', challenge: '12345000'})
@@ -26,4 +27,34 @@ describe('POST /slack/event', () => {
     .set('Content-type', 'application/json')
     .expect(200, {}, done);
   });
+
+  test('should respond with 200 when an hmac is correct', (done) => {
+    const body = '{"hello":"world"}';
+    const timestamp = 123456789;
+    const sha256 = crypto.createHmac('sha256', process.env.SLACK_SIGNING_SECRET || 'secret');
+    const signature = sha256.update(`v0:${timestamp}:${body}`).digest('hex');
+
+    request(app)
+    .post('/slack/event')
+    .set('Content-type', 'application/json')
+    .set('x-slack-request-timestamp', 123456789)
+    .set('x-slack-signature', `v0=${signature}`)
+    .send(body)
+    .expect(200, {}, done);
+  });
+
+  test('should respond with 401 when an hmac is incorrect', (done) => {
+    const body = '{"hello":"world"}';
+    const timestamp = 123456789;
+    const signature = 'incorrect-signature';
+
+    request(app)
+    .post('/slack/event')
+    .set('Content-type', 'application/json')
+    .set('x-slack-request-timestamp', 123456789)
+    .set('x-slack-signature', `v0=${signature}`)
+    .send(body)
+    .expect(401, {}, done);
+  }); 
+
 });
