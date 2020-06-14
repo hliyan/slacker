@@ -29,7 +29,7 @@ app.post('/slack/event', (req, res) => {
   console.log(json);
 
   if (json.type === 'event_callback') {
-    if (json.event.type ==- 'message') {
+    if (json.event.type === 'message') {
       console.log(`MESSAGE: user=${json.event.user}, channel=${json.event.channel}, text=${json.event.text}`);
     }
   }
