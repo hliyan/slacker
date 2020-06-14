@@ -2,7 +2,7 @@ const express = require('express');
 const crypto = require('crypto');
 
 const app = express();
-app.use(express.text({type: "*/*"}));
+app.use(express.text({type: "*/*"})); // need raw body to compute hmac
 
 app.get('/', (req, res) => { // basic test endpoint
   res.status(200).json({hello: 'world'});
@@ -26,6 +26,7 @@ app.post('/slack/event', (req, res) => {
     return;
   }
 
+  console.log(json);
   res.status(200).json({});
 });
 
