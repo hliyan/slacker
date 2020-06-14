@@ -39,10 +39,17 @@ app.post('/slack/event', async (req, res) => {
   if (json.type === 'event_callback') {
     if (json.event.type === 'message') {
       console.log(`MESSAGE: user=${json.event.user}, channel=${json.event.channel}, text=${json.event.text}`);
-      let res = await slackApi.post('chat.postMessage', {
-        channel: json.event.channel,
-        text: json.event.text
-      });
+      try {
+        let res = await slackApi.post('chat.postMessage', {
+          channel: json.event.channel,
+          text: json.event.text
+        });
+        console.log('----------');
+        console.log(res);
+      } catch (e) {
+        console.log(e);
+      }
+
     }
   }
   res.status(200).json({});
