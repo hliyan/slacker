@@ -28,7 +28,7 @@ app.post('/slack/event', async (req, res) => {
 
   if (json.type === 'event_callback') {
     /* istanbul ignore next */ // tested using the conversation engine
-    if (json.event.type === 'message') {
+    if ((json.event.type === 'message') && (json.event.subtype !== 'bot_message')) {
       try {
         let res = await slackApi.post('chat.postMessage', {
           channel: json.event.channel,
