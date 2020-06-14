@@ -18,7 +18,7 @@ app.get('/', (req, res) => { // basic test endpoint
   res.status(200).json({hello: 'world'});
 });
 
-app.post('/slack/event', (req, res) => {
+app.post('/slack/event', async (req, res) => {
   if (req.headers['x-slack-signature']) { // https://api.slack.com/authentication/verifying-requests-from-slack
     const sha256 = crypto.createHmac('sha256', process.env.SLACK_SIGNING_SECRET || 'secret');
     const signature = sha256.update(`v0:${ req.headers['x-slack-request-timestamp']}:${req.body}`).digest('hex');
