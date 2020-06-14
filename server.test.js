@@ -57,4 +57,8 @@ describe('POST /slack/event', () => {
     .expect(401, {}, done);
   }); 
 
+  test('should respond with hello to a message from a user', (done) => {
+    
+  });
+
 });

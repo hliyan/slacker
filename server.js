@@ -1,8 +1,18 @@
 const express = require('express');
 const crypto = require('crypto');
+const axios = require('axios');
 
 const app = express();
 app.use(express.text({type: "*/*"})); // need raw body to compute hmac
+
+const slackApi = axios.create({
+  baseURL: 'https://slack.com/api',
+  timeout: 4000,
+  headers: {
+    'Content-Type': 'application/json', 
+    'Authorization': `Bearer ${process.env.SLACK_BOT_TOKEN}`
+  }
+});
 
 app.get('/', (req, res) => { // basic test endpoint
   res.status(200).json({hello: 'world'});
@@ -26,11 +36,13 @@ app.post('/slack/event', (req, res) => {
     return;
   }
 
-  console.log(json);
-
   if (json.type === 'event_callback') {
     if (json.event.type === 'message') {
       console.log(`MESSAGE: user=${json.event.user}, channel=${json.event.channel}, text=${json.event.text}`);
+      let res = await slackApi.post('chat.postMessage', {
+        channel: json.event.channel,
+        text: json.event.text
+      });
     }
   }
   res.status(200).json({});
