@@ -1,18 +1,9 @@
 const express = require('express');
 const crypto = require('crypto');
-const axios = require('axios');
+const slackApi = require('./slackApi');
 
 const app = express();
 app.use(express.text({type: "*/*"})); // need raw body to compute hmac
-
-const slackApi = axios.create({
-  baseURL: 'https://slack.com/api',
-  timeout: 4000,
-  headers: {
-    'Content-Type': 'application/json', 
-    'Authorization': `Bearer ${process.env.SLACK_BOT_TOKEN}`
-  }
-});
 
 app.get('/', (req, res) => { // basic test endpoint
   res.status(200).json({hello: 'world'});
@@ -24,7 +15,6 @@ app.post('/slack/event', async (req, res) => {
     const signature = sha256.update(`v0:${ req.headers['x-slack-request-timestamp']}:${req.body}`).digest('hex');
     const messageSignature = req.headers['x-slack-signature'].split('=')[1];
     if (signature !== messageSignature) {
-      console.log('signature mismatch: ' + signature + ' != ' + messageSignature);
       res.status(401).json({});
       return;
     }
@@ -37,22 +27,25 @@ app.post('/slack/event', async (req, res) => {
   }
 
   if (json.type === 'event_callback') {
+    /* istanbul ignore next */ // tested using the conversation engine
     if (json.event.type === 'message') {
-      console.log(`MESSAGE: user=${json.event.user}, channel=${json.event.channel}, text=${json.event.text}`);
       try {
         let res = await slackApi.post('chat.postMessage', {
           channel: json.event.channel,
           text: json.event.text
         });
-        console.log('----------');
-        console.log(res);
+        
+        if (!res.data.ok) { // {data: {ok:bool, error:str} }
+          console.error(res.data);
+        }
       } catch (e) {
         console.log(e);
       }
 
     }
   }
-  res.status(200).json({});
+  res.status(200).json({}); // TODO: don't keep slack waiting
+  
 });
 
 module.exports = app;
