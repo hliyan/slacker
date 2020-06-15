@@ -20,19 +20,19 @@ app.post('/slack/event', async (req, res) => {
     }
   }
 
-  const json = JSON.parse(req.body);
-  if (json.type === 'url_verification') { // initial challenge from slack
-    res.status(200).json({challenge: json.challenge});
+  const body = JSON.parse(req.body);
+  if (body.type === 'url_verification') { // initial challenge from slack
+    res.status(200).json({challenge: body.challenge});
     return;
   }
 
-  if (json.type === 'event_callback') {
+  if (body.type === 'event_callback') {
     /* istanbul ignore next */ // tested using the conversation engine
-    if ((json.event.type === 'message') && (json.event.subtype !== 'bot_message')) {
+    if ((body.event.type === 'message') && (body.event.user !== "U013S66EMK9")) { // messages from other users
       try {
         let res = await slackApi.post('chat.postMessage', {
-          channel: json.event.channel,
-          text: json.event.text
+          channel: body.event.channel,
+          text: 'hello'
         });
         
         if (!res.data.ok) { // {data: {ok:bool, error:str} }
