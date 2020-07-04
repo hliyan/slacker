@@ -4,7 +4,7 @@ const crypto = require('crypto'); // for the hmac tests
 const sinon = require("sinon"); // to mock the slackApi
 const slackApi = require('./slackApi');
 
-// util functions
+// util functions...
 const computeHmac = (timestamp, body) => {
   const sha256 = crypto.createHmac('sha256', process.env.SLACK_SIGNING_SECRET || 'secret');
   const signature = sha256.update(`v0:${timestamp}:${body}`).digest('hex');
