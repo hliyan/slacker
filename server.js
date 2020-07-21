@@ -6,7 +6,7 @@ const app = express();
 app.use(express.text({type: "*/*"})); // need raw body to compute hmac
 
 app.get('/', (req, res) => { // basic test endpoint
-  res.status(200).json({hello: 'world!'});
+  res.status(200).json({hello: 'world!!'});
 });
 
 app.post('/slack/event', async (req, res) => {
