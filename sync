@@ -1,8 +1,6 @@
 #!/bin/bash
 
-read text
-
 git add .
-git commit -m "$text"
+git commit -m "$1"
 git push
 git push heroku master
