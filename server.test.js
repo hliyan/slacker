@@ -16,7 +16,7 @@ describe('GET /', () => {
     request(app)
       .get('/')
       .expect('Content-Type', /json/)
-      .expect(200, { hello: 'world!' }, done)
+      .expect(200, { hello: 'world!!' }, done)
   });
 });
 
